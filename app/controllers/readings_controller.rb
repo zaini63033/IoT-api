@@ -9,6 +9,22 @@ class ReadingsController < ApplicationController
     end
   end
 
+  def get_device_readings
+    device_id = params[:device_id]
+    limit = params[:limit]&.to_i || 50
+
+    readings = Reading.where(device_id: device_id).order(ts: "desc").limit(limit)
+
+    render json: {
+      device_id: device_id,
+      limit: limit,
+      count: readings.count,
+      readings: readings
+    }, status: :ok
+  end
+
+
+
   private
 
   def reading_params

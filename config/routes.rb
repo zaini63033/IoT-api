@@ -10,4 +10,7 @@ Rails.application.routes.draw do
 
   # Create Reading Route
   post "readings", to: "readings#create"
+
+
+  get "devices/:device_id/readings", to: "readings#get_device_readings"
 end
