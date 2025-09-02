@@ -13,4 +13,6 @@ Rails.application.routes.draw do
 
 
   get "devices/:device_id/readings", to: "readings#get_device_readings"
+  get "devices/:device_id/summary", to: "readings#get_device_summary"
+
 end

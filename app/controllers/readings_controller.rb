@@ -23,7 +23,77 @@ class ReadingsController < ApplicationController
     }, status: :ok
   end
 
+  def get_device_summary
+    device_id = params[:device_id]
+    window = params[:window]
 
+    hours = window.match(/(\d+)h/)[1].to_i rescue 24
+
+    time_from = Time.now - hours.hours
+
+    readings = Reading.where(device_id: device_id).where("ts>= ?", time_from)
+
+    if readings.exists?
+      min_temp = Float::INFINITY
+      avg_temp = 0
+      max_temp = -Float::INFINITY
+
+      min_humid = Float::INFINITY
+      avg_humid = 0
+      max_humid = -Float::INFINITY
+
+      readings.each do |reading|
+        metrics = reading["metrics"]
+        temp = metrics["temperature"]
+        humid = metrics["humidity"]
+
+        avg_temp += temp
+        avg_humid += humid 
+
+        if(temp < min_temp)
+          min_temp = temp;
+        end
+
+        if(humid < min_humid)
+          min_humid = humid
+        end
+
+        if(temp > max_temp)
+          max_temp = temp;
+        end
+
+        if(humid > max_humid)
+          max_humid = humid
+        end
+
+
+
+      end
+
+      avg_temp /= readings.size
+      avg_humid /= readings.size
+
+      render json: {
+      device_id: device_id,
+      hours: hours,
+      count: readings.count,
+      readings: readings,
+      temperature:
+      {
+        min: min_temp,
+        avg: avg_temp,
+        max: max_temp,
+      },
+      humidity:
+      {
+        min: min_humid,
+        avg: avg_humid,
+        max: max_humid,
+      }
+    }, status: :ok
+    end
+
+  end
 
   private
 
