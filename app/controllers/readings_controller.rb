@@ -5,7 +5,7 @@ class ReadingsController < ApplicationController
     if @reading.save
       render json: { message: "IoT reading saved successfully!", data: @reading }, status: :created
     else
-      render json: { message: @reading.errors.full_messages }
+      render json: { message: @reading.errors.full_messages }, status:  :unprocessable_entity
     end
   end
 
