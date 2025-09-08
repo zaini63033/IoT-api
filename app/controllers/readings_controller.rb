@@ -1,13 +1,13 @@
 class ReadingsController < ApplicationController
-  def create
-    @reading = Reading.new(reading_params)
+  # def create
+  #   @reading = Reading.new(reading_params)
 
-    if @reading.save
-      render json: { message: "IoT reading saved successfully!", data: @reading }, status: :created
-    else
-      render json: { message: @reading.errors.full_messages }, status:  :unprocessable_entity
-    end
-  end
+  #   if @reading.save
+  #     render json: { message: "IoT reading saved successfully!", data: @reading }, status: :created
+  #   else
+  #     render json: { message: @reading.errors.full_messages }, status:  :unprocessable_entity
+  #   end
+  # end
 
   def get_device_readings
     device_id = params[:device_id]

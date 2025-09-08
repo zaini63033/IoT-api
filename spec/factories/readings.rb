@@ -5,4 +5,4 @@ FactoryBot.define do
         ts {Time.current}
         metrics{{"temperature" => 25.0, "humidity" => 60}}
     end
-endrail
+end

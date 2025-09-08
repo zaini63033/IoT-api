@@ -1,0 +1,5 @@
+development:
+  brokers:
+    - "localhost:9092"
+  group_id: "readings-consumer-group"
+  log_level: "info"
