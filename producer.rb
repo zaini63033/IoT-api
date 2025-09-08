@@ -13,11 +13,22 @@ reading_data_array = [
   {
     reading: {
       device_id: "device_001",
-      reading_id: "reading_123",
+      reading_id: "reading_888",
       ts: Time.now,
       metrics: {
-        temperature: 24.5,
-        humidity: 60
+        temperature: "testing",
+        humidity: "invalid"
+      }
+    }
+  },
+  {
+    reading: {
+      device_id: "device_001",
+      reading_id: "reading_999",
+      ts: Time.now,
+      metrics: {
+        temperature: 31,
+        humidity: 20
       }
     }
   },

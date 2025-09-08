@@ -3,7 +3,7 @@ class ReadingsConsumer < Racecar::Consumer
 
   def process(message)
     payload = JSON.parse(message.value)
-    process_reading(payload)
+    process_reading(payload["reading"])
   rescue JSON::ParserError => e
     log_and_store_dead_letter(message, e.message)
   rescue StandardError => e
