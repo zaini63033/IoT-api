@@ -1,18 +1,14 @@
 require "json"
 require "kafka"
 
-# Configure the Kafka client to connect to your local broker.
-# This assumes your Kafka broker is running on localhost:9092.
 kafka = Kafka.new(
   seed_brokers: ["localhost:9092"]
 )
 
-# Create a producer instance.
 producer = kafka.async_producer(
   delivery_interval: 1
 )
 
-# Define an array of reading data.
 reading_data_array = [
   {
     reading: {
@@ -115,17 +111,14 @@ reading_data_array = [
   }
 ]
 
-# The topic to send the messages to.
 topic_name = "readings"
 
-# Produce each message to the Kafka topic.
 reading_data_array.each do |reading_data|
   message_payload = JSON.generate(reading_data)
   producer.produce(message_payload, topic: topic_name)
   puts "Sent message with reading_id: #{reading_data.dig(:reading, :reading_id)}"
 end
 
-# Deliver the messages and shut down the producer.
 producer.deliver_messages
 producer.shutdown
 

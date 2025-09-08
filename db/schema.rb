@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_01_092727) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_065940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "dead_letters", force: :cascade do |t|
+    t.text "payload"
+    t.string "error"
+    t.string "topic"
+    t.integer "partition"
+    t.integer "offset"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "readings", force: :cascade do |t|
     t.string "device_id"

@@ -3,11 +3,11 @@ class ReadingsConsumer < Racecar::Consumer
 
   def process(message)
     payload = JSON.parse(message.value)
-    process_reading(payload["reading"])
+    process_reading(payload)
   rescue JSON::ParserError => e
-    Rails.logger.error "Invalid JSON message: #{e.message}"
+    log_and_store_dead_letter(message, e.message)
   rescue StandardError => e
-    Rails.logger.error "Error processing Kafka message: #{e.message}"
+    log_and_store_dead_letter(message, e.message)
   end
 
   private
@@ -17,7 +17,18 @@ class ReadingsConsumer < Racecar::Consumer
     if reading.save
       Rails.logger.info "IoT reading saved successfully! #{reading.inspect}"
     else
-      Rails.logger.error "Failed to save reading: #{reading.errors.full_messages.join(', ')}"
+      log_and_store_dead_letter(nil, reading.errors.full_messages.join(', '))
     end
+  end
+
+  def log_and_store_dead_letter(message, error)
+    Rails.logger.error "Dead-letter: #{error}"
+    DeadLetter.create(
+      payload: message&.value,
+      error: error,
+      topic: message&.topic,
+      partition: message&.partition,
+      offset: message&.offset
+    )
   end
 end
