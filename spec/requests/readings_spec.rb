@@ -37,11 +37,11 @@ RSpec.describe "Readings API", type: :request do
         # end
 
         it "returns readings limited by limit param" do
-            get "http://localhost:3000/devices/device_001/readings?limit=2"
+            get "http://localhost:3000/devices/device123/readings?limit=2"
             expect(response).to have_http_status(:ok)
             body = JSON.parse(response.body)
-            expect(body["readings"].length).to be <=2 
-            expect(body["device_id"]).to eq("device_001")
+            expect(body["readings"].length).to be <= 2
+            expect(body["device_id"]).to eq("device123")
 
         end
     end
@@ -53,10 +53,15 @@ RSpec.describe "Readings API", type: :request do
         # end
 
         it "returns readings summary within window param" do
-            get "http://localhost:3000/devices/device_001/summary?window=24h"
+            puts "Reading count: #{Reading.count}"
+            for reading in Reading.all do
+                puts reading.device_id, reading.reading_id, reading.metrics
+            end
+
+            get "http://127.0.0.1:3000/devices/device123/summary"
             expect(response).to have_http_status(:ok)
             body = JSON.parse(response.body)
-            expect(body["device_id"]).to eq("device_001")
+            expect(body["device_id"]).to eq("device123")
 
         end
     end

@@ -27,9 +27,12 @@ class ReadingsController < ApplicationController
     device_id = params[:device_id]
     window = params[:window]
 
-    hours = window.match(/(\d+)h/)[1].to_i rescue 24
+    time_from = 0
 
-    time_from = Time.now - hours.hours
+    if window.present?
+      hours = window.match(/(\d+)h/)[1].to_i rescue 24
+      time_from = Time.now - hours.hours
+    end
 
     readings = Reading.where(device_id: device_id).where("ts>= ?", time_from)
 
